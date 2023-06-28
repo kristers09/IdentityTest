@@ -1,0 +1,33 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@page "/"
+
+@inject ILogger<Index> Logger
+@inject RoleManager<IdentityRole> RoleManager
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<button @onclick="HandleClick">Create role!</button>
+
+
+@code {
+
+  private async Task HandleClick()
+  {
+    var result = await RoleManager.CreateAsync(new IdentityRole("Administrator") { NormalizedName = "ADMINISTRATOR" });
+
+    if (result.Succeeded)
+    {
+      Logger.LogInformation("Role CREATED!!");
+    }
+    else
+    {
+      foreach (IdentityError e in result.Errors) {
+        Logger.LogError(e.Description);
+      }
+    }
+  }
+
+}
